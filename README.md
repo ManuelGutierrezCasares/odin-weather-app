@@ -3,7 +3,9 @@ Weather app
 
 Working on:
 - UI
-  - Show condition icon
+  - General UI improvements
   - Try different backgrounds
+  
+- Add Forecast (maybe)
 
 More improvements to come...

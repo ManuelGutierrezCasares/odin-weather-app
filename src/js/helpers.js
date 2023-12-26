@@ -26,12 +26,45 @@ export async function getWeatherData (location) {
   }
 }
 
+export async function getSearchData (location) {
+  try {
+    const key = '84b6efaf0a054a9cb09165855231512';
+    const baseUrl = 'https://api.weatherapi.com/v1';
+    const jsonPath = '/search.json';
+    const url = `${baseUrl}${jsonPath}?key=${key}&q=${location}`;
+
+    loadingContent(true);
+    const promise = await fetch(url, { mode: 'cors' });
+    loadingContent(false);
+
+    if (promise.status !== 200) {
+      throw await promise.json();
+    }
+    const data = await promise.json();
+    if (!data.length) {
+      throw new Error('No matching location found.');
+    }
+    return data;
+  } catch (err) {
+    alert(err);
+    return false;
+  }
+}
+
 function processInput (location) {
-  const regex = /([^A-Za-z\s])/g;
-  return location
-    .trim()
-    .replaceAll(regex, '')
-    .replaceAll(' ', '+');
+  if (typeof location !== 'number') {
+    const regex = /([^A-Za-z\s])/g;
+    return location
+      .trim()
+      .replaceAll(regex, '')
+      .replaceAll(' ', '+');
+  }
+
+  return prepareSearchID(location);
+}
+
+function prepareSearchID (location) {
+  return `id:${location}`;
 }
 
 export function populateObj (WEATHER_KEYS, response) {

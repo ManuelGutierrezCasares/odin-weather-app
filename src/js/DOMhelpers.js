@@ -5,15 +5,18 @@ export function createDispĺay () {
   const container = document.getElementById('container');
   const h1 = document.createElement('h1');
   const h3 = document.createElement('h3');
+  const icon = document.createElement('img');
   const ul = document.createElement('ul');
 
   h1.id = 'city';
   h3.id = 'region-country';
+  icon.id = 'icon';
 
   createLi(7, ul);
 
   container.appendChild(h1);
   container.appendChild(h3);
+  container.appendChild(icon);
   container.appendChild(ul);
 
   return container;
@@ -41,6 +44,7 @@ export function refreshDisplay (obj, type) {
   const cloudText = document.getElementById('li-6');
   const time = document.getElementById('li-7');
   const isDay = obj.is_day;
+  const icon = document.getElementById('icon');
 
   city.textContent = obj.name;
   regionCountry.textContent = `${obj.region}, ${obj.country}`;
@@ -67,6 +71,8 @@ export function refreshDisplay (obj, type) {
     body.style.backgroundColor = '#0c1445';
     body.style.color = 'white';
   }
+
+  icon.src = `https:${obj.condition.icon}`;
 }
 
 export function switchTypesText (obj, e) {
@@ -106,4 +112,24 @@ export function loadingContent (loading) {
   div.style.backgroundBlendMode = '';
   div.style.opacity = '';
   div.style.zIndex = '';
+}
+
+export function createDatalistOptions (e) {
+  const datalist = document.getElementById('datalistOptions');
+  const option = document.createElement('option');
+
+  option.value = `${e.name}, ${e.region}, ${e.country}`;
+  option.id = `${e.id}`;
+
+  datalist.appendChild(option);
+}
+
+export function clearDatalistOptions () {
+  const datalist = document.getElementById('datalistOptions');
+
+  if (datalist.children.length > 0) {
+    datalist.replaceChildren();
+    return true;
+  }
+  return false;
 }

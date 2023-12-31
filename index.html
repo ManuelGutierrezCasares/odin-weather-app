@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="./scss/style.css">
   <title>Odin's Weather App</title>
 <script defer src="main.js"></script></head>
 <body>
@@ -25,13 +24,15 @@
   
   
   
-
-  <div class="container py-4 px-3 mx-auto" id="container"></div>
+  <div class="container py-4 px-3 mx-auto row" id="main">
+    <div class="container col-3" id="container"></div>
+    <div class="container col-9 row" id="forecast"></div>
+  </div>
+  
 
   <div class="container py-4 px-3 mx-auto">
     <button class="btn btn-secondary" id="type">Switch to Farenheit</button>
   </div>
   
-  <script src="./js/main.js"></script>
 </body>
 </html>

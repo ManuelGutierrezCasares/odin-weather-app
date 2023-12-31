@@ -7,9 +7,11 @@ export async function getWeatherData (location) {
     }
     const key = '84b6efaf0a054a9cb09165855231512';
     const baseUrl = 'https://api.weatherapi.com/v1';
-    const jsonPath = '/current.json';
+    // const jsonPath = '/current.json';
+    const jsonPath = '/forecast.json';
+    const forecastDays = 3;
     const city = processInput(location);
-    const url = `${baseUrl}${jsonPath}?key=${key}&q=${city}`;
+    const url = `${baseUrl}${jsonPath}?key=${key}&q=${city}&days=${forecastDays}`;
 
     loadingContent(true);
     const promise = await fetch(url, { mode: 'cors' });
@@ -67,12 +69,19 @@ function prepareSearchID (location) {
   return `id:${location}`;
 }
 
-export function populateObj (WEATHER_KEYS, response) {
+export function changeIconSize (icon) {
+  const url = `https:${icon}`;
+  return url.replace('64x64', '128x128');
+}
+
+export function populateObj (WEATHER_KEYS, FORECAST_KEYS, response) {
   try {
     const obj = {};
     obj.country = response.location.country;
     obj.name = response.location.name;
     obj.region = response.location.region;
+    obj.forecast = [];
+
     for (const x in response.current) {
       WEATHER_KEYS.forEach(e => {
         if (e === x) {
@@ -80,6 +89,20 @@ export function populateObj (WEATHER_KEYS, response) {
         }
       });
     }
+
+    response.forecast.forecastday.forEach(x => {
+      const temp = {};
+      for (const day in x.day) {
+        FORECAST_KEYS.forEach(e => {
+          if (e === day) {
+            temp[day] = x.day[day];
+          }
+        });
+      }
+      temp.date = x.date;
+      obj.forecast.push(temp);
+    });
+
     saveDataToLocalStorage(obj);
     return obj;
   } catch (err) {

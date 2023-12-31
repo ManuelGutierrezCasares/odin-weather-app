@@ -1,5 +1,5 @@
 import { getSearchData, getWeatherData, populateObj, retrieveDataFromLocalStorage } from './helpers';
-import { clearDatalistOptions, createDatalistOptions, createDispĺay, switchTypesText } from './DOMhelpers';
+import { clearDatalistOptions, createDatalistOptions, createForecastDisplay, createMainDispĺay, switchTypesText } from './DOMhelpers';
 
 // Import our custom CSS
 import '../scss/styles.scss';
@@ -15,10 +15,12 @@ export const switchTypes = document.getElementById('type'); ;
   const searchBtn = document.getElementById('search-btn');
 
   const WEATHER_KEYS = ['cloud', 'condition', 'feelslike_c', 'feelslike_f', 'humidity', 'is_day', 'temp_c', 'temp_f', 'wind_kph', 'wind_mph'];
+  const FORECAST_KEYS = ['condition', 'daily_will_it_rain', 'daily_will_it_snow', 'maxtemp_c', 'maxtemp_f', 'mintemp_c', 'mintemp_f'];
   let obj = {};
 
   async function init () {
-    createDispĺay();
+    createMainDispĺay();
+    createForecastDisplay(3);
 
     obj = retrieveDataFromLocalStorage();
 
@@ -30,14 +32,15 @@ export const switchTypes = document.getElementById('type'); ;
   };
 
   async function main (name) {
-    let response = {};
+    let weatherData = {};
     if (name) {
-      response = await getWeatherData(name);
+      weatherData = await getWeatherData(name);
     } else {
-      response = await getWeatherData(input.value);
+      weatherData = await getWeatherData(input.value);
     }
-    if (response) {
-      obj = populateObj(WEATHER_KEYS, response);
+    if (weatherData) {
+      obj = populateObj(WEATHER_KEYS, FORECAST_KEYS, weatherData);
+      // Refreshes Display
       switchTypesText(obj, null);
     }
   }
@@ -71,6 +74,7 @@ export const switchTypes = document.getElementById('type'); ;
   searchBtn.addEventListener('click', () => main(null));
 
   switchTypes.addEventListener('click', (e) => {
+    // Refreshes Display
     switchTypesText(obj, e);
   });
 })();

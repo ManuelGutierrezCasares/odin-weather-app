@@ -1,11 +1,10 @@
 # odin-weather-app
 Weather app
 
+// TODO README
+
 Working on:
 - UI
   - General UI improvements
-  - Try different backgrounds
-  
-- Add Forecast (maybe)
 
 More improvements to come...
